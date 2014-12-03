@@ -24,28 +24,45 @@ def transaction(): return db.transaction()
 #
 # check out http://webpy.org/cookbook/transactions for examples
 
+
 # returns the current time from your database
 def getTime():
-    # TODO: update the query string to match
-    # the correct column and table name in your database
     query_string = 'select time from CurrentTime'
     results = query(query_string)
-    # alternatively: return results[0]['time']
-    return results[0].time 
+    return results[0].time  # alternatively: return results[0]['time']
+
+def setTime(new_time):
+    t = db.transaction()
+    try:
+        db.update('CurrentTime', where="time", time = new_time)
+    except Exception as e:
+        t.rollback()
+        print str(e)
+    else:
+        t.commit()
+
 
 # returns a single item specified by the Item's ID in the database
 # Note: if the `result' list is empty (i.e. there are no items for a
 # a given ID), this will throw an Exception!
 def getItemById(item_id):
+    q = 'select * from Item where ID = $itemID'
+    result = query(q, { 'itemID': item_id })
+
     # TODO: rewrite this method to catch the Exception in case `result' is empty
-    query_string = 'select * from Items where item_ID = $itemID'
-    result = query(query_string, {'itemID': item_id})
-    return result[0]
+    if len(result) > 0: return result[0]
+    else: return 'There are no items with that ID!'
+
+def getAllItems():
+    q = 'select * from Item'
+    result = query(q)
+    return result
 
 # wrapper method around web.py's db.query method
 # check out http://webpy.org/cookbook/query for more info
 def query(query_string, vars = {}):
     return list(db.query(query_string, vars))
+
 
 #####################END HELPER METHODS#####################
 
