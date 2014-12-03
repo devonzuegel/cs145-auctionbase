@@ -31,8 +31,7 @@ def getTime():
     query_string = 'select time from CurrentTime'
     results = query(query_string)
     # alternatively: return results[0]['time']
-    return results[0].time # TODO: update this as well to match the
-                                  # column name
+    return results[0].time 
 
 # returns a single item specified by the Item's ID in the database
 # Note: if the `result' list is empty (i.e. there are no items for a
