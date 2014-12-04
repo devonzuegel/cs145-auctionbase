@@ -1,24 +1,25 @@
 - [x] Ability to manually change the “current time.”
 	- [x] add to `POST('select_time')` in `auctionbase.py`
 
-- [ ] Ability for auction users to enter bids on open auctions.
+- [x] Ability for auction users to enter bids on open auctions.
 	- [x] create `GET('add_bid')` in `auctionbase.py`
-	- [ ] create `POST('add_bid')` in `auctionbase.py` (with "realistic bidding behavior")
+	- [x] create `POST('add_bid')` in `auctionbase.py` (with "realistic bidding behavior")
 		- [x] don't accept bids <= current highest bid
-			- [ ] display SQL error message (restriction already checked in constraints)
-		- [ ] don't accept bids on closed auctions
+			- [x] display SQL error message (restriction already checked in constraints)
+		- [x] don't accept bids on closed auctions
 			1. Find by item by ID
 			2. If `ends < current_time`, don't accept the bid.
-		- [ ] don't accept bids from users that don't exist
+		- [x] don't accept bids from users that don't exist
 			1. Find user row from passed in userID.
 			2. If the query returns an empty result, don't accept the bid.
-		- [ ] a bid at the `buy_price` closes the auction
+		- [x] a bid at the `buy_price` closes the auction
 			1. If `price >= buy_price`, update `ends` to `current_time`
+		- [ ] update `first_bid` (if `num_of_bids == 0`), `currently`, `num_of_bids` when new bid is added
 
 > Some of these restrictions may already be checked by your constraints and triggers from Part 2 of the Project; others may require additional triggers or code.
 
 - [ ] Automatic auction closing: an auction is “open” after its start time and “closed” when its end time is past or its buy price is reached.
-	- [ ] during `POST('select_time)`, close all auctions where end time is after new current time
+	- [ ] during `POST('select_time')`, close all auctions where end time is after new current time
 
 - [x] Ability to browse auctions of interest based on the following input parameters:
 	- [x] item ID

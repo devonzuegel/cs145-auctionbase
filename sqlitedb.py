@@ -82,16 +82,14 @@ def getItems(vars = {}, minPrice = '', maxPrice = ''):
   if vars != {}:
     q += web.db.sqlwhere(vars, grouping=' AND ')
 
+  # If min- and/or maxPrice are defined, append those restrictions to query
   if (minPrice != '') or (maxPrice != ''):
-    if vars != {}:
-      q += ' AND '
-    if (minPrice != ''):
-      q += ' currently >= ' + minPrice
-    if (minPrice != '' and maxPrice != ''):
-      q += ' AND '
-    if (maxPrice != ''):
-      q += ' currently <= ' + maxPrice
+    if vars != {}:                          q += ' AND '
+    if (minPrice != ''):                    q += ' currently >= ' + minPrice
+    if (minPrice != '' and maxPrice != ''): q += ' AND '
+    if (maxPrice != ''):                    q += ' currently <= ' + maxPrice
 
+  # Return result of the query
   return query(q)
 
 
