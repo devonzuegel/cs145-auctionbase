@@ -190,30 +190,41 @@ class search_items:
     userID = post_params['userID']
     minPrice = post_params['minPrice']
     maxPrice = post_params['maxPrice']
+    status = post_params['status']
 
     where_dict = {}
     if (itemID != ''):    where_dict['ID'] = itemID
     if (userID != ''):    where_dict['sellerID'] = userID
 
-    items = sqlitedb.getItems(where_dict, minPrice, maxPrice)
+    items = sqlitedb.getItems(where_dict, minPrice, maxPrice, status)
 
     return render_template(
       'search.html', 
-      search_result = items
+      search_result = items,
+      message = status
     )
+
+
 
 
 class view_item:
   def GET(self, itemID):
+    
     current_time = sqlitedb.getTime()
+    
     item_row = sqlitedb.getItemById(itemID)
+    
     bids = sqlitedb.getBidsByItemId(itemID)
+    
     is_open = current_time < item_row.ends 
+    
     winner = sqlitedb.getWinnerId(itemID)
+
     return render_template('view_item.html', 
       item = item_row, 
       is_open = is_open,
-      bids = bids
+      bids = bids,
+      currenttime = current_time
     )
 
 ###########################################################################################

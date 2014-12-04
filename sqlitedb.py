@@ -76,11 +76,12 @@ def getUserById(user_id):
 
 
 
-def getItems(vars = {}, minPrice = '', maxPrice = ''):
+def getItems(vars = {}, minPrice = '', maxPrice = '', status = 'all'):
   # Create basic query that selects all items
   q = 'select * from Item'
+    ############# 'where ends > (select time from currenttime)'
 
-  if (vars != {}) or (minPrice != '') or (maxPrice != ''):
+  if (vars != {}) or (minPrice != '') or (maxPrice != '') or (status != 'all'):
     q += ' where '
 
   # If params for the search are indicated, add them to
@@ -95,6 +96,16 @@ def getItems(vars = {}, minPrice = '', maxPrice = ''):
     if (minPrice != '' and maxPrice != ''): q += ' AND '
     if (maxPrice != ''):                    q += ' currently <= ' + maxPrice
 
+  if (status != 'all'):
+    if (vars != {}) or (minPrice != '') or (maxPrice != ''):
+      q += ' AND '
+    if status == 'open':
+      q += 'ends >= (select time from currenttime) and started <= (select time from currenttime)'
+    if status == 'close':
+      q += 'ends < (select time from currenttime)'
+    if status == 'notStarted':
+      q += 'started > (select time from currenttime)'
+
   # Return result of the query
   return query(q)
 
@@ -107,6 +118,8 @@ def updateItemEndTime(itemID, new_end_time):
 def addBid(itemID, price, userID, current_time):
   db.insert('Bid', itemID = itemID, amount = price, bidderID = userID, time = current_time)
 
+def getWinnerId(itemID):
+  q = 'select * from User where'
 
 # wrapper method around web.py's db.query method
 # check out http://webpy.org/cookbook/query for more info

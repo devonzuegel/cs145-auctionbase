@@ -10,7 +10,8 @@
 	{% if is_open %}
 		This auction is still open!
 	{% else %}
-		This auction is closed. The winner is: <b>{{ winner }}</b>
+
+		This auction is closed. The winner is: <b>{{ winner }}</b> {{ currenttime }}
 	{% endif %}
 </div>
 
