@@ -137,7 +137,7 @@ class search_bids:
     minPrice = post_params['minPrice']
     maxPrice = post_params['maxPrice']
 
-    items = sqlitedb.getAllItems()
+    items = sqlitedb.getItems({'sellerID': 'bigaljal'})
 
     return render_template(
       'search.html', 
