@@ -117,16 +117,26 @@ class add_bid:
     itemID = post_params['itemID']
     price = post_params['price']
     userID = post_params['userID']
-    current_time = getTime()
+    current_time = sqlitedb.getTime()
 
+    item_row = sqlitedb.getItemById(itemID)
+
+    ### Many ways to fail...
+    if (item_row.ends < current_time):
+      return render_template('add_bid.html', message = 'That auction is already closed')
+
+
+    ### ... but I guess it's possible to succeed :P
     # db.insert('Bid', itemID = itemID, amount = price, bidderID = userID, time = current_time)
-
-    return render_template('add_bid.html', message = userID)
+    return render_template('add_bid.html', message = item_row)
 
 class search_items:
   # A GET request to the URL '/search'
   def GET(self):
     return render_template('search.html')
+
+
+2001-12-23 17:28:20
 
   # A POST request to the URL '/search'
   def POST(self):
