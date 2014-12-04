@@ -209,6 +209,7 @@ class view_item:
     item_row = sqlitedb.getItemById(itemID)
     bids = sqlitedb.getBidsByItemId(itemID)
     is_open = current_time < item_row.ends 
+    winner = sqlitedb.getWinnerId(itemID)
     return render_template('view_item.html', 
       item = item_row, 
       is_open = is_open,
