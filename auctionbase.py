@@ -119,24 +119,60 @@ class add_bid:
     userID = post_params['userID']
     current_time = sqlitedb.getTime()
 
+    ### Many ways to fail... #######################################
+
+    # (1) All fields must be filled
+    if (itemID == '') or (price == '') or (userID == ''):
+      return render_template('add_bid.html', message = 'You must fill out every field')
+
     item_row = sqlitedb.getItemById(itemID)
 
-    ### Many ways to fail...
+    # (2) There must be an item with that ID
+    if item_row == None:
+      return render_template(
+        'add_bid.html', 
+        message = 'There are no items with that ID'
+      )
+
+    # (3) Users can't bid on closed auction items
     if (item_row.ends < current_time):
-      return render_template('add_bid.html', message = 'That auction is already closed')
+      return render_template(
+        'add_bid.html', 
+        message = 'That auction is already closed'
+      )
 
+    # (4) UserID must correspond to an existing user in User table
+    user_row = sqlitedb.getUserById(userID);
+    if user_row == None:
+      return render_template(
+        'add_bid.html', 
+        message = 'There are no users with that ID'
+      )
 
-    ### ... but I guess it's possible to succeed :P
+    ### ... but it's possible to succeed :P ########################
+
+    # A bid at the buy_price closes the auction
+    if (price >= item_row.buy_price):
+      # Update ends to current_time
+      sqlitedb.updateItemEndTime(itemID, current_time);
+      return render_template(
+        'add_bid.html', 
+        message = 'end time updated >> aution closed!'
+      )
+
     # db.insert('Bid', itemID = itemID, amount = price, bidderID = userID, time = current_time)
-    return render_template('add_bid.html', message = item_row)
+    return render_template(
+      'add_bid.html', 
+      message = user_row
+    )
+
+
+
 
 class search_items:
   # A GET request to the URL '/search'
   def GET(self):
     return render_template('search.html')
-
-
-2001-12-23 17:28:20
 
   # A POST request to the URL '/search'
   def POST(self):

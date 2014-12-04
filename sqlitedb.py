@@ -51,11 +51,22 @@ def getItemById(item_id):
   q = 'select * from Item where ID = $itemID'
   result = query(q, { 'itemID': item_id })
 
-  # TODO: rewrite this method to catch the Exception in case `result' is empty
   try:
     return result[0]
   except IndexError:
-    return 'There are no items with that ID!'
+    return None
+
+
+
+# returns a single item specified by the Item's ID in the database
+def getUserById(user_id):
+  q = 'select * from User where userID = $userID'
+  result = query(q, { 'userID': user_id })
+
+  try:
+    return result[0]
+  except IndexError:
+    return None
 
 
 
@@ -84,6 +95,9 @@ def getItems(vars = {}, minPrice = '', maxPrice = ''):
   return query(q)
 
 
+
+def updateItemEndTime(itemID, new_end_time):
+  db.update('Item',  where='ID = ' + itemID,  ends = new_end_time)
 
 # wrapper method around web.py's db.query method
 # check out http://webpy.org/cookbook/query for more info
