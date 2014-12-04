@@ -204,9 +204,11 @@ class search_items:
 
 
 class view_item:
-  def GET(self, id):
-    item = {'name': 'NAME'}
-    return render_template('view_item.html', item = item)
+  def GET(self, itemID):
+    current_time = sqlitedb.getTime()
+    item_row = sqlitedb.getItemById(itemID)
+    is_open = current_time < item_row.ends 
+    return render_template('view_item.html', item = item_row, is_open = is_open)
 
 ###########################################################################################
 ##########################DO NOT CHANGE ANYTHING BELOW THIS LINE!##########################
