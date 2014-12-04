@@ -55,7 +55,8 @@ urls = (
   '/currtime', 'curr_time',
   '/selecttime', 'select_time',
   '/add_bid', 'add_bid',
-  '/search', 'search_items'
+  '/search', 'search_items',
+  '/(.*)', 'view_item'
 )
 
 
@@ -200,6 +201,12 @@ class search_items:
       'search.html', 
       search_result = items
     )
+
+
+class view_item:
+  def GET(self, id):
+    item = {'name': 'NAME'}
+    return render_template('view_item.html', item = item)
 
 ###########################################################################################
 ##########################DO NOT CHANGE ANYTHING BELOW THIS LINE!##########################
