@@ -123,30 +123,35 @@ class add_bid:
 
     # (1) All fields must be filled
     if (itemID == '') or (price == '') or (userID == ''):
-      return render_template('add_bid.html', message = 'You must fill out every field')
+      return render_template('add_bid.html', 
+        message = 'You must fill out every field'
+      )
 
     item_row = sqlitedb.getItemById(itemID)
 
     # (2) There must be an item with that ID
     if item_row == None:
-      return render_template(
-        'add_bid.html', 
+      return render_template('add_bid.html', 
         message = 'There are no items with that ID'
       )
 
     # (3) Users can't bid on closed auction items
-    if (item_row.ends < current_time):
-      return render_template(
-        'add_bid.html', 
+    if (item_row.ends <= current_time):
+      return render_template('add_bid.html', 
         message = 'That auction is already closed'
       )
 
     # (4) UserID must correspond to an existing user in User table
     user_row = sqlitedb.getUserById(userID);
     if user_row == None:
-      return render_template(
-        'add_bid.html', 
+      return render_template('add_bid.html', 
         message = 'There are no users with that ID'
+      )
+
+    # (5) Don't accept bids <= current highest bid
+    if float(price) <= float(item_row.currently):
+      return render_template('add_bid.html', 
+        message = 'You must make a bid higher than the current price (currently $' + item_row.currently + ')'
       )
 
     ### ... but it's possible to succeed :P ########################
@@ -157,13 +162,15 @@ class add_bid:
       sqlitedb.updateItemEndTime(itemID, current_time);
       return render_template(
         'add_bid.html', 
-        message = 'end time updated >> aution closed!'
+        message = 'Congratulations! You just closed that auction by making a bid at or above the buy price'
       )
 
-    # db.insert('Bid', itemID = itemID, amount = price, bidderID = userID, time = current_time)
+    # Add bid to Bid table in db
+    sqlitedb.addBid(itemID, price, userID, current_time)
+
     return render_template(
       'add_bid.html', 
-      message = user_row
+      message = 'Success! You\'ve just placed a bid on ' + item_row.name + '(' + itemID + ')'
     )
 
 

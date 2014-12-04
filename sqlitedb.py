@@ -99,6 +99,11 @@ def getItems(vars = {}, minPrice = '', maxPrice = ''):
 def updateItemEndTime(itemID, new_end_time):
   db.update('Item',  where='ID = ' + itemID,  ends = new_end_time)
 
+
+def addBid(itemID, price, userID, current_time):
+  db.insert('Bid', itemID = itemID, amount = price, bidderID = userID, time = current_time)
+
+
 # wrapper method around web.py's db.query method
 # check out http://webpy.org/cookbook/query for more info
 def query(query_string, vars = {}):
