@@ -57,16 +57,29 @@ def getItemById(item_id):
   except IndexError:
     return 'There are no items with that ID!'
 
-    
 
-def getItems(vars = {}):
+
+def getItems(vars = {}, minPrice = '', maxPrice = ''):
   # Create basic query that selects all items
   q = 'select * from Item'
+
+  if (vars != {}) or (minPrice != '') or (maxPrice != ''):
+    q += ' where '
 
   # If params for the search are indicated, add them to
   # narrow down the query
   if vars != {}:
-    q += ' where ' + web.db.sqlwhere(vars, grouping=' AND ')
+    q += web.db.sqlwhere(vars, grouping=' AND ')
+
+  if (minPrice != '') or (maxPrice != ''):
+    if vars != {}:
+      q += ' AND '
+    if (minPrice != ''):
+      q += ' currently >= ' + minPrice
+    if (minPrice != '' and maxPrice != ''):
+      q += ' AND '
+    if (maxPrice != ''):
+      q += ' currently <= ' + maxPrice
 
   return query(q)
 

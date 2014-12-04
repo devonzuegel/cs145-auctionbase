@@ -55,7 +55,7 @@ urls = (
   '/currtime', 'curr_time',
   '/selecttime', 'select_time',
   '/add_bid', 'add_bid',
-  '/search', 'search_bids'
+  '/search', 'search_items'
 )
 
 
@@ -123,7 +123,7 @@ class add_bid:
 
     return render_template('add_bid.html', message = userID)
 
-class search_bids:
+class search_items:
   # A GET request to the URL '/search'
   def GET(self):
     return render_template('search.html')
@@ -137,7 +137,11 @@ class search_bids:
     minPrice = post_params['minPrice']
     maxPrice = post_params['maxPrice']
 
-    items = sqlitedb.getItems({'sellerID': 'bigaljal'})
+    where_dict = {}
+    if (itemID != ''):    where_dict['ID'] = itemID
+    if (userID != ''):    where_dict['sellerID'] = userID
+
+    items = sqlitedb.getItems(where_dict, minPrice, maxPrice)
 
     return render_template(
       'search.html', 
