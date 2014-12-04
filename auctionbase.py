@@ -145,7 +145,6 @@ class search_items:
 
     return render_template(
       'search.html', 
-      message = post_params, 
       search_result = items
     )
 

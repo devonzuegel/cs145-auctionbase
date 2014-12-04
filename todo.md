@@ -1,19 +1,27 @@
 - [x] Ability to manually change the “current time.”
-	- [ ] add to `POST('select_time')` in `auctionbase.py`
+	- [x] add to `POST('select_time')` in `auctionbase.py`
 
 - [ ] Ability for auction users to enter bids on open auctions.
-	- [ ] create `GET('add_bid')` in `auctionbase.py`
-	- [ ] create `POST('add_bid')` in `auctionbase.py`
+	- [x] create `GET('add_bid')` in `auctionbase.py`
+	- [ ] create `POST('add_bid')` in `auctionbase.py` (with "realistic bidding behavior")
+		- [ ] don't accept bids <= current highest bid
+		- [ ] don't accept bids on closed auctions
+		- [ ] don't accept bids from users that don't exist
+		- [ ] a bid at the `buy_price` closes the auction
+
+> Some of these restrictions may already be checked by your constraints and triggers from Part 2 of the Project; others may require additional triggers or code.
 
 - [ ] Automatic auction closing: an auction is “open” after its start time and “closed” when its end time is past or its buy price is reached.
-- [ ] Ability to browse auctions of interest based on the following input parameters:
-	- [ ] item ID
-	- [ ] category
+	- [ ] during `POST('select_time)`, close all auctions where end time is after new current time
+
+- [x] Ability to browse auctions of interest based on the following input parameters:
+	- [x] item ID
+	- [x] category
 	- [ ] item description (This should be a substring search, i.e. not an exact match.)
-	- [ ] price
+	- [x] price
 	- [ ] open/closed status
 
-**Note:** These parameters are compositional (you should be able to browse by category AND price, not category OR price)
+> **Note:** These parameters are compositional (you should be able to browse by category AND price, not category OR price)
 
 - [ ] Ability to view all relevant information pertaining to a single auction. This should be displayed on an individual webpage, and it should display all of the information in your database pertaining to that particular item. In particular, this page should include:
 
@@ -23,8 +31,6 @@
 		- the time of the bid
 		- the price of the bid
 	- [ ] if the auction is closed, it should display the winner of the auction (if a winner exists)
-
-Furthermore, your AuctionBase system must support “realistic” bidding behavior. For example, it should not accept bids that are less than or equal to the current highest bid, bids on closed auctions, or bids from users that don’t exist. Also, as specified above, a bid at the buy price should close the auction. Some of these restrictions may already be checked by your constraints and triggers from Part 2 of the Project; others may require additional triggers or code.
 
 If you do decide to add additional triggers to your database, please create additional `triggerN_add.sql` and `triggerN_drop.sql` files to implement these, and include it as part of your submission. You should also be sure to update your `createDatabase.sh` script to include these extra trigger files. (See the submission instructions at the end of this document for more details.)
 
