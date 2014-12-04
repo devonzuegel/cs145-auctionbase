@@ -207,8 +207,13 @@ class view_item:
   def GET(self, itemID):
     current_time = sqlitedb.getTime()
     item_row = sqlitedb.getItemById(itemID)
+    bids = sqlitedb.getBidsByItemId(itemID)
     is_open = current_time < item_row.ends 
-    return render_template('view_item.html', item = item_row, is_open = is_open)
+    return render_template('view_item.html', 
+      item = item_row, 
+      is_open = is_open,
+      bids = bids
+    )
 
 ###########################################################################################
 ##########################DO NOT CHANGE ANYTHING BELOW THIS LINE!##########################

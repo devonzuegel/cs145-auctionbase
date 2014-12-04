@@ -20,9 +20,32 @@
 		&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 		<span>{{ item[key]|e }}</span>
 	</div>
-
 {% endfor %}
 
+<h3>Bids</h3>
+
+{% if bids %}
+
+	{% for bid in bids %}
+
+		<h4>{{ bid['name'] }}</h4>
+
+		{% for key in bid %}
+			<div>
+				<b><span>{{ key|e }}</span></b>
+				&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+				<span>{{ bid[key]|e }}</span>
+			</div>
+
+	  {% endfor %}
+
+	  <div>--------</div>
+
+	{% endfor %}
+
+{% else %}
+	<div>No results</div>
+{% endif %}
 
 
 {# also make sure to include this very last line as well #}

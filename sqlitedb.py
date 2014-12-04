@@ -58,6 +58,12 @@ def getItemById(item_id):
 
 
 
+def getBidsByItemId(itemID):
+  q = 'select * from Bid where itemID = $itemID'
+  return query(q, {'itemID': itemID})
+
+
+
 # returns a single item specified by the Item's ID in the database
 def getUserById(user_id):
   q = 'select * from User where userID = $userID'
