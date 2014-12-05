@@ -119,7 +119,19 @@ def addBid(itemID, price, userID, current_time):
   db.insert('Bid', itemID = itemID, amount = price, bidderID = userID, time = current_time)
 
 def getWinnerId(itemID):
-  q = 'select * from User where'
+  q  = 'select bidderID from Bid '
+  q += 'where itemID = $itemID '
+  q += 'and amount = ('
+  q +=   'select max(amount) from Bid '
+  q +=   'where itemID = $itemID'
+  q += ')'
+  
+  result = query(q, { 'itemID': itemID })
+
+  try:
+    return result[0].bidderID
+  except IndexError:
+    return None
 
 # wrapper method around web.py's db.query method
 # check out http://webpy.org/cookbook/query for more info

@@ -137,7 +137,7 @@ class add_bid:
       )
 
     # (3) Users can't bid on closed auction items
-    if (item_row.ends <= current_time):
+    if (string_to_time(item_row.ends) <= string_to_time(current_time)):
       return render_template('add_bid.html', 
         message = 'That auction is already closed'
       )
@@ -200,8 +200,7 @@ class search_items:
 
     return render_template(
       'search.html', 
-      search_result = items,
-      message = status
+      search_result = items
     )
 
 
@@ -213,18 +212,15 @@ class view_item:
     current_time = sqlitedb.getTime()
     
     item_row = sqlitedb.getItemById(itemID)
-    
+    is_open = current_time < item_row.ends
     bids = sqlitedb.getBidsByItemId(itemID)
-    
-    is_open = current_time < item_row.ends 
-    
-    winner = sqlitedb.getWinnerId(itemID)
+    winner = str(sqlitedb.getWinnerId(itemID))
 
     return render_template('view_item.html', 
       item = item_row, 
       is_open = is_open,
       bids = bids,
-      currenttime = current_time
+      winner = winner
     )
 
 ###########################################################################################
